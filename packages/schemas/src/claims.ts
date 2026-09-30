@@ -56,6 +56,18 @@ export type ClaimVerificationStatus = z.infer<typeof ClaimVerificationStatus>;
  * human_review         a person checked it
  */
 export const VerificationMethod = z.enum(["deterministic_match", "llm_verifier", "human_review"]);
+export type VerificationMethod = z.infer<typeof VerificationMethod>;
+
+/**
+ * The only Producer kind that may perform each verification method. Who authored the
+ * claim (`Claim.producedBy`) is independent: an LLM-written claim may be verified by
+ * code or a person.
+ */
+export const VERIFIER_KIND_FOR_METHOD = {
+  deterministic_match: "deterministic_engine",
+  human_review: "user",
+  llm_verifier: "llm",
+} as const satisfies Record<VerificationMethod, Producer["kind"]>;
 
 export const ClaimVerification = z
   .object({
@@ -102,12 +114,16 @@ export const Claim = z
     if (v.status !== "unverified" && (!v.method || !v.verifiedAt || !v.verifiedBy)) {
       issue(["verification"], "a checked claim must record method, time and verifier");
     }
+    if (v.method && v.verifiedBy && v.verifiedBy.kind !== VERIFIER_KIND_FOR_METHOD[v.method]) {
+      issue(["verification", "verifiedBy"], `${v.method} must be performed by ${VERIFIER_KIND_FOR_METHOD[v.method]}, not ${v.verifiedBy.kind}`);
+    }
     switch (v.status) {
       case "verified":
         if (c.type !== "quantitative_fact" && c.type !== "qualitative_fact") issue(["verification", "status"], `${c.type} claims cannot be verified; at most supported`);
         if (supports === 0) issue(["evidence"], "a verified claim requires supporting evidence");
         if (contradicts > 0) issue(["verification", "status"], "a claim with contradicting evidence cannot be verified; use conflicting");
         if (v.method === "llm_verifier") issue(["verification", "method"], "an LLM verifier cannot mark a claim verified");
+        if (v.verifiedBy?.kind === "llm") issue(["verification", "verifiedBy"], "an LLM verifier cannot mark a claim verified");
         if (v.freshness === "superseded") issue(["verification", "freshness"], "verification against superseded evidence must be redone");
         if (v.strength !== "strong") issue(["verification", "strength"], "verified implies strong evidence");
         break;
@@ -121,6 +137,7 @@ export const Claim = z
         break;
       case "contradicted":
         if (contradicts === 0) issue(["evidence"], "contradicted requires contradicting evidence");
+        if (supports > 0) issue(["verification", "status"], "supporting and contradicting evidence together is conflicting (with mixed strength), not contradicted");
         break;
       case "insufficient_evidence":
         if (v.strength === "strong") issue(["verification", "strength"], "insufficient evidence cannot be strong");

@@ -233,6 +233,64 @@ describe("Claim verification", () => {
   });
 });
 
+describe("Verification method and verifier consistency", () => {
+  const engine = { kind: "deterministic_engine", engine: "finance-math", engineVersion: "1" } as const;
+  const human = { kind: "user", userId: "usr_reviewer" } as const;
+  const llm = { kind: "llm", model: "m", promptId: "claim_verifier", promptVersion: "1" } as const;
+  const adapter = { kind: "source_adapter", adapter: "a", adapterVersion: "1" } as const;
+  const verified = (method: string, verifiedBy: unknown) => ({
+    ...clone(ex.revenueClaim),
+    verification: { ...clone(ex.revenueClaim.verification), method, verifiedBy },
+  });
+  const supported = (method: string, verifiedBy: unknown) => ({
+    ...clone(ex.growthInterpretationClaim),
+    verification: { ...clone(ex.growthInterpretationClaim.verification), method, verifiedBy },
+  });
+
+  it("each method requires its matching verifier kind", () => {
+    bad(Claim, verified("deterministic_match", llm));
+    bad(Claim, verified("deterministic_match", human));
+    bad(Claim, verified("deterministic_match", adapter));
+    bad(Claim, verified("human_review", engine));
+    bad(Claim, verified("human_review", llm));
+    bad(Claim, supported("llm_verifier", engine));
+    bad(Claim, supported("llm_verifier", human));
+  });
+  it("a verified claim never has an LLM verifier, whatever the method says", () => {
+    bad(Claim, verified("deterministic_match", llm));
+    bad(Claim, verified("human_review", llm));
+    bad(Claim, verified("llm_verifier", llm));
+  });
+  it("an LLM-authored claim verified by code or a person remains valid", () => {
+    expect(ex.revenueClaim.producedBy.kind).toBe("llm");
+    ok(Claim, verified("deterministic_match", engine));
+    ok(Claim, verified("human_review", human));
+  });
+  it("an LLM verifier can still mark a claim supported or insufficient_evidence", () => {
+    ok(Claim, supported("llm_verifier", llm));
+    ok(Claim, ex.noContradictionClaim);
+  });
+});
+
+describe("Contradicted vs conflicting", () => {
+  const base = clone(ex.revenueClaim);
+  const both = [
+    { evidenceId: "ev_a", relation: "supports" },
+    { evidenceId: "ev_b", relation: "contradicts" },
+  ];
+  it("contradicted is rejected when supporting evidence also exists", () => {
+    bad(Claim, { ...base, evidence: both, verification: { ...base.verification, status: "contradicted", strength: "limited" } });
+    bad(Claim, { ...base, evidence: both, verification: { ...base.verification, status: "contradicted", strength: "mixed" } });
+  });
+  it("the same evidence is valid as conflicting with mixed strength", () => {
+    ok(Claim, { ...base, evidence: both, verification: { ...base.verification, status: "conflicting", strength: "mixed" } });
+  });
+  it("contradicted with only contradicting evidence remains valid", () => {
+    ok(Claim, { ...base, evidence: [{ evidenceId: "ev_b", relation: "contradicts" }], verification: { ...base.verification, status: "contradicted", strength: "strong" } });
+    ok(Claim, { ...base, evidence: [{ evidenceId: "ev_b", relation: "contradicts" }, { evidenceId: "ev_c", relation: "context" }], verification: { ...base.verification, status: "contradicted", strength: "limited" } });
+  });
+});
+
 describe("Investment thesis evidence", () => {
   it("an active thesis requires supporting evidence", () => {
     bad(InvestmentThesis, { ...clone(ex.thesis), supportingEvidence: [] });

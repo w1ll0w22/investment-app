@@ -55,8 +55,10 @@ The proposed enumeration VERIFIED / SUPPORTED / CONFLICTING / INSUFFICIENT_EVIDE
 | `verified` | Factual claim matched against authoritative primary evidence by a deterministic check (number equals canonical fact; quote appears verbatim) or human review. | ≥1 supporting ref, 0 contradicting, method ≠ `llm_verifier`, strength `strong`, freshness ≠ `superseded`, type is a fact |
 | `supported` | Evidence supports, below the verified standard (secondary sources, interpretation, LLM verifier). | ≥1 supporting, 0 contradicting |
 | `conflicting` | Credible evidence on both sides. | ≥1 supporting and ≥1 contradicting; strength `mixed` |
-| `contradicted` | Evidence contradicts and nothing credible supports. | ≥1 contradicting |
+| `contradicted` | Evidence contradicts and nothing credible supports. | ≥1 contradicting, 0 supporting (both present → `conflicting`) |
 | `insufficient_evidence` | Checked; nothing or too little bears on it. | strength ≠ `strong` |
+
+**Verifier consistency** — `verification.method` fixes who may perform it: `deterministic_match` → `deterministic_engine`, `human_review` → `user`, `llm_verifier` → `llm`. A `verified` claim never has an LLM verifier. The claim's author (`producedBy`) is independent, so an LLM-written claim can be verified by code or a person.
 
 **Freshness** — whether that evidence is still current for this use: `current`, `stale`, `superseded`, `unknown`.
 
