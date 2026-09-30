@@ -12,7 +12,7 @@
  *             ticker is never an identity key.
  */
 import { z } from "zod";
-import { CalendarDate, CurrencyCode, IssuerId, ListingId, SecurityId, TimeZone, maybeKnown } from "./primitives.js";
+import { CalendarDate, CurrencyCode, IssuerId, ListingId, SecurityId, TimeZone, maybeKnown } from "./primitives";
 
 /** External identifiers. Values are stored exactly as issued (CIK zero-padded to 10 digits). */
 export const IssuerIdentifiers = z

@@ -9,9 +9,9 @@
  * so a later review can ask "was the reasoning I actually had correct?".
  */
 import { z } from "zod";
-import { CalendarDate, EvidenceStrength, QualitativeLevel, Quantity, SecurityId, ThesisId, Timestamp, UserId, maybeKnown, MoneyPerShare } from "./primitives.js";
-import { EvidenceReference } from "./evidence.js";
-import { MetricId } from "./metrics.js";
+import { CalendarDate, EvidenceStrength, QualitativeLevel, Quantity, SecurityId, ThesisId, Timestamp, UserId, maybeKnown, MoneyPerShare } from "./primitives";
+import { EvidenceReference } from "./evidence";
+import { MetricId } from "./metrics";
 
 /** A condition that can be evaluated deterministically against a future metric value. */
 export const MeasurableCondition = z

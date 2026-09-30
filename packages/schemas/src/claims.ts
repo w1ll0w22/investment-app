@@ -22,8 +22,8 @@
  * See docs/INTELLIGENCE_DOCTRINE.md §"Verification".
  */
 import { z } from "zod";
-import { ClaimId, EvidenceStrength, FactId, IssuerId, MetricValueId, Producer, SecurityId, Timestamp } from "./primitives.js";
-import { EvidenceFreshness, EvidenceReference, PRIMARY_TIERS, type AuthorityTier, type Evidence } from "./evidence.js";
+import { ClaimId, EvidenceStrength, FactId, IssuerId, MetricValueId, Producer, SecurityId, Timestamp } from "./primitives";
+import { EvidenceFreshness, EvidenceReference, PRIMARY_TIERS, type AuthorityTier, type Evidence } from "./evidence";
 
 /**
  * quantitative_fact  a specific number about the world ("FY2024 revenue was $391.0B").

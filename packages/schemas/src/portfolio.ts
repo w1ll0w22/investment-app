@@ -7,7 +7,7 @@
  * here, so they cannot drift from prices.
  */
 import { z } from "zod";
-import { CalendarDate, CurrencyCode, Money, PortfolioId, SecurityId, ShareCount, ThesisId, Timestamp, UserId, WatchlistId, maybeKnown } from "./primitives.js";
+import { CalendarDate, CurrencyCode, Money, PortfolioId, SecurityId, ShareCount, ThesisId, Timestamp, UserId, WatchlistId, maybeKnown } from "./primitives";
 
 export const TaxLot = z
   .object({

@@ -11,8 +11,8 @@
  * structurally as prominent as upside.
  */
 import { z } from "zod";
-import { ClaimId, EvidenceId, EvidenceStrength, IssuerId, ListingId, MetricValueId, Producer, ResearchBriefId, SecurityId, Timestamp } from "./primitives.js";
-import { Claim } from "./claims.js";
+import { ClaimId, EvidenceId, EvidenceStrength, IssuerId, ListingId, MetricValueId, Producer, ResearchBriefId, SecurityId, Timestamp } from "./primitives";
+import { Claim } from "./claims";
 
 export const ResearchSectionKind = z.enum([
   "business_overview", // how the company makes money

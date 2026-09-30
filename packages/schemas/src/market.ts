@@ -4,7 +4,7 @@
  * adapters behind the MarketDataProvider port (see providers.ts).
  */
 import { z } from "zod";
-import { CalendarDate, EvidenceId, ListingId, MoneyPerShare, NonNegativeDecimal, SecurityId, ShareCount, Timestamp, compareDecimal } from "./primitives.js";
+import { CalendarDate, EvidenceId, ListingId, MoneyPerShare, NonNegativeDecimal, SecurityId, ShareCount, Timestamp, compareDecimal } from "./primitives";
 
 /** Our internal provider key (e.g. "provider_a"). Vendor names/field names never leave the adapter. */
 export const ProviderKey = z.string().regex(/^[a-z][a-z0-9_]*$/);

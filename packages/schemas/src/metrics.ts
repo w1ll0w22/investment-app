@@ -24,9 +24,9 @@ import {
   Money,
   MoneyPerShare,
   Ratio,
-} from "./primitives.js";
-import { DurationPeriod, FinancialPeriod, type FiscalLabel } from "./periods.js";
-import type { FinancialConceptId } from "./financials.js";
+} from "./primitives";
+import { DurationPeriod, FinancialPeriod, type FiscalLabel } from "./periods";
+import type { FinancialConceptId } from "./financials";
 
 // ---------------------------------------------------------------------------
 // Basis

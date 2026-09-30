@@ -19,7 +19,7 @@
  * mislabelled as a quarter.
  */
 import { z } from "zod";
-import { CalendarDate } from "./primitives.js";
+import { CalendarDate } from "./primitives";
 
 export const FiscalLabel = z.enum(["Q1", "Q2", "Q3", "Q4", "H1", "H2", "YTD6", "YTD9", "FY", "TTM"]);
 export type FiscalLabel = z.infer<typeof FiscalLabel>;

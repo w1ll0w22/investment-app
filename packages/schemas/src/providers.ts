@@ -11,9 +11,9 @@
  *   - stamp `provider` with our internal ProviderKey and `retrievedAt` with retrieval time
  *   - report failures as ProviderResult errors, never as empty successful data
  */
-import type { CalendarDate, ListingId, SecurityId } from "./primitives.js";
-import type { SecurityResolution } from "./identity.js";
-import type { CorporateAction, PriceAdjustment, PriceBar, Quote } from "./market.js";
+import type { CalendarDate, ListingId, SecurityId } from "./primitives";
+import type { SecurityResolution } from "./identity";
+import type { CorporateAction, PriceAdjustment, PriceBar, Quote } from "./market";
 
 export type ProviderError = {
   code: "not_found" | "rate_limited" | "unauthorized" | "unavailable" | "invalid_response" | "unsupported";
