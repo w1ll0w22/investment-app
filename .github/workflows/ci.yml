@@ -44,3 +44,19 @@ jobs:
 
       - name: Production build
         run: pnpm build
+
+  # Repository scripts must work on Windows (the owner develops there).
+  # The boundary check needs no dependencies, so this job skips install.
+  windows-scripts:
+    name: Repository scripts on Windows
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Check schemas package boundary
+        run: node scripts/check-boundaries.mjs

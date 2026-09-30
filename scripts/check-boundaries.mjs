@@ -1,9 +1,12 @@
 // Fails if packages/schemas stops being framework-independent.
 // Allowed runtime dependency: zod. Forbidden imports: frameworks, UI, Node built-ins, other workspace packages.
 import { readFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
+import { join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = new URL("..", import.meta.url).pathname;
+// fileURLToPath, not URL.pathname: it yields native paths on Windows ("C:\\...", not "/C:/...")
+// and decodes percent-escapes such as spaces in the checkout path.
+const root = fileURLToPath(new URL("..", import.meta.url));
 const pkgDir = join(root, "packages/schemas");
 const pkg = JSON.parse(readFileSync(join(pkgDir, "package.json"), "utf8"));
 
@@ -27,7 +30,7 @@ function walk(dir) {
       const source = readFileSync(path, "utf8");
       for (const m of source.matchAll(importRe)) {
         const spec = m[1] ?? m[2] ?? m[3] ?? m[4];
-        if (spec && FORBIDDEN.test(spec)) problems.push(`${path.slice(root.length)} imports "${spec}"`);
+        if (spec && FORBIDDEN.test(spec)) problems.push(`${relative(root, path)} imports "${spec}"`);
       }
     }
   }

@@ -31,14 +31,25 @@ scripts/
 
 ## Setup
 
+These commands work in any shell (macOS/Linux terminals, Windows PowerShell, Git Bash):
+
 ```
 git clone https://github.com/w1ll0w22/investment-app.git
 cd investment-app
-corepack enable              # once per machine; provides the pinned pnpm
+corepack enable              # once per machine; provides the pinned pnpm (on Windows, may need an elevated terminal)
 pnpm install --frozen-lockfile
-cp apps/web/.env.example apps/web/.env.local   # optional; every variable has a default
 pnpm dev                     # http://localhost:3000, health check at /api/health
 ```
+
+Optional: create a local env file. Every variable has a default, so this is only needed to override one.
+
+| Shell | Command (from the repository root) |
+|---|---|
+| macOS / Linux / Git Bash | `cp apps/web/.env.example apps/web/.env.local` |
+| Windows PowerShell | `Copy-Item apps\web\.env.example apps\web\.env.local` |
+| Windows Command Prompt | `copy apps\web\.env.example apps\web\.env.local` |
+
+Then run `pnpm validate` to confirm your setup matches CI.
 
 ## Commands
 
@@ -53,7 +64,7 @@ Run from the repository root:
 | `pnpm build` | Production build of every package that has a build (currently the web app) |
 | `pnpm validate` | Runs all four checks in the same order as CI |
 
-CI (`.github/workflows/ci.yml`) runs on every pull request and on pushes to `main`: a frozen-lockfile install, then the boundary check, typecheck, test and build. A PR is mergeable only when CI is green.
+CI (`.github/workflows/ci.yml`) runs on every pull request and on pushes to `main`. The main job, on Linux, does a frozen-lockfile install, then the boundary check, typecheck, test and build. A second job runs the boundary check on Windows, so path handling in repository scripts stays portable. A PR is mergeable only when CI is green.
 
 ## Environment variables
 
