@@ -10,6 +10,7 @@ docs/
   INTELLIGENCE_DOCTRINE.md  what code vs models do, grounding, verification, uncertainty, evals
   DATA_PROVENANCE.md        source hierarchy, dates, missing/stale/conflicting data, restatements
   DOMAIN_CONTRACTS.md       one-row-per-object index of the contracts
+  reports/                  stage completion reports
 packages/schemas/           @investment-app/schemas: TypeScript + Zod domain contracts
   src/                      primitives, periods, identity, filings, financials, metrics,
                             market, evidence, claims, research, thesis, portfolio, providers
