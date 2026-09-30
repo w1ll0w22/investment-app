@@ -7,8 +7,8 @@
  * Timestamp; "when did the market know" questions use `acceptedAt`.
  */
 import { z } from "zod";
-import { CalendarDate, FilingId, IssuerId, Timestamp } from "./primitives.js";
-import { FinancialPeriod } from "./periods.js";
+import { CalendarDate, FilingId, IssuerId, Timestamp } from "./primitives";
+import { FinancialPeriod } from "./periods";
 
 /** V0 forms. Amendments are separate form types on EDGAR ("10-K/A"). Anything else is "other" with the raw form kept. */
 export const FormType = z.enum(["10-K", "10-K/A", "10-Q", "10-Q/A", "8-K", "8-K/A", "20-F", "40-F", "6-K", "DEF 14A", "S-1", "4", "other"]);

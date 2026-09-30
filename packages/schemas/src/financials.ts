@@ -15,8 +15,8 @@
  * produce or modify facts.
  */
 import { z } from "zod";
-import { EvidenceId, FactId, FilingId, IssuerId, Producer, SecurityId, Timestamp, maybeKnown, Money, MoneyPerShare, ShareCount } from "./primitives.js";
-import { FinancialPeriod } from "./periods.js";
+import { EvidenceId, FactId, FilingId, IssuerId, Producer, SecurityId, Timestamp, maybeKnown, Money, MoneyPerShare, ShareCount } from "./primitives";
+import { FinancialPeriod } from "./periods";
 
 // ---------------------------------------------------------------------------
 // Concept catalog

@@ -23,8 +23,8 @@ import {
   Producer,
   SecurityId,
   Timestamp,
-} from "./primitives.js";
-import { FinancialPeriod } from "./periods.js";
+} from "./primitives";
+import { FinancialPeriod } from "./periods";
 
 /**
  * Source authority tiers, highest first. Precedence rules in DATA_PROVENANCE.md.
